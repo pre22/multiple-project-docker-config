@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  sub_project1:
+    container_name: subdir1_service
+    build:
+      context: ./subdir1
+      dockerfile: Dockerfile
+  
+    
+
+  sub_project2:
+    container_name: subdir2_service
+    build:
+      context: ./subdir2
+      dockerfile: Dockerfile
