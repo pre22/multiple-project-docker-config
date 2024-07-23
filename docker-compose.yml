@@ -23,7 +23,7 @@ services:
   
   nginx:
       container_name: app_nginx
-      build: .
+      build: ./nginx
       ports:
           - "443:443"
           - "80:80"
