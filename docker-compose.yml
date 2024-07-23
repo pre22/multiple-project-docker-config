@@ -20,3 +20,18 @@ services:
     build:
       context: ./subdir2
       dockerfile: Dockerfile
+  
+  nginx:
+      container_name: app_nginx
+      build: .
+      ports:
+          - "443:443"
+          - "80:80"
+      volumes:
+        - .:/code
+        - certbot:/etc/letsencrypt
+        - certbot:/var/www/certbot  
+
+volumes:
+  static:
+  certbot:
