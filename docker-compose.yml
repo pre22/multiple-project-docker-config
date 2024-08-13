@@ -20,6 +20,20 @@ services:
     build:
       context: ./subdir2
       dockerfile: Dockerfile
+
+  prometheus:
+    image: prom/prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
   
   nginx:
       container_name: app_nginx
