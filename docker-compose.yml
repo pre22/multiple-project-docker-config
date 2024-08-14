@@ -5,15 +5,12 @@ services:
     build:
       context: ./subdir1
       dockerfile: Dockerfile
-  
-    
 
   sub_project2:
     container_name: subdir2_service
     build:
       context: ./subdir2
       dockerfile: Dockerfile
-
 
   sub_project3:
     container_name: subdir2_service
@@ -34,6 +31,37 @@ services:
     restart: unless-stopped
     ports:
       - 3000:3000
+    volumes:
+      - ./data/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=MYPASSWORT
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_DOMAIN=myrul.com
+      - GF_SMTP_ENABLED=true
+      - GF_SMTP_HOST=smtp.gmail.com:587
+      - GF_SMTP_USER=myadrress@gmail.com
+      - GF_SMTP_PASSWORD=mypassword
+      - GF_SMTP_FROM_ADDRESS=myaddress@gmail.com
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: monitoring_node_exporter
+    restart: unless-stopped
+    expose:
+      - 9100
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest  # Replace with specific version if needed
+    hostname: cadvisor
+    # platform: linux/amd64  # Adjust platform for your architecture (e.g., linux/arm64)
+    volumes:
+      - "/:/rootfs:ro"  # Read-only access to root filesystem
+      - "/var/run:/var/run:ro"  # Read-only access to runtime information
+      - "/sys:/sys:ro"  # Read-only access to system information
+      - "/var/lib/docker/:/var/lib/docker:ro"  # Read-only access to Docker state
+    ports:
+      - "8080:8080"  # Expose cAdvisor UI on port 8080
+  
   
   nginx:
       container_name: app_nginx
