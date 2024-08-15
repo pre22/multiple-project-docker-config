@@ -66,7 +66,7 @@ services:
       - "/var/lib/docker/:/var/lib/docker:ro"  # Read-only access to Docker state
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
-      - "8080:8080"  # Expose cAdvisor UI on port 8080
+      - 8080  # Expose cAdvisor UI on port 8080
   
   
   nginx:
