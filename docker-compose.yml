@@ -20,6 +20,7 @@ services:
 
   prometheus:
     image: prom/prometheus
+    container_name: prometheus
     restart: unless-stopped
     volumes:
       - prometheus_data:/prometheus
@@ -29,12 +30,13 @@ services:
 
   grafana:
     image: grafana/grafana
+    container_name: grafana
     restart: unless-stopped
     ports:
       - 3000:3000
     volumes:
       - grafana_data:/var/lib/grafana
-      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      # - ./grafana/provisioning/:/etc/grafana/provisioning/
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=MYPASSWORT
       - GF_USERS_ALLOW_SIGN_UP=false
@@ -47,13 +49,14 @@ services:
 
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: monitoring_node_exporter
+    container_name: node_exporter
     restart: unless-stopped
     expose:
       - 9100
   
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest  # Replace with specific version if needed
+    container_name: cAdvisor
     hostname: cadvisor
     # platform: linux/amd64  # Adjust platform for your architecture (e.g., linux/arm64)
     volumes:
@@ -61,12 +64,13 @@ services:
       - "/var/run:/var/run:ro"  # Read-only access to runtime information
       - "/sys:/sys:ro"  # Read-only access to system information
       - "/var/lib/docker/:/var/lib/docker:ro"  # Read-only access to Docker state
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
     ports:
       - "8080:8080"  # Expose cAdvisor UI on port 8080
   
   
   nginx:
-      container_name: app_nginx
+      container_name: nginx
       build: ./nginx
       ports:
           - "443:443"
